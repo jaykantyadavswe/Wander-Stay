@@ -1,26 +1,772 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wander-Stay</title>
-</head>
-<body>
-    <h3>Edit your Listings</h3>
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="post">
-        <input type="text" name="listing[title]" value="<%= listing.title %>" >
-        <br>
-        <textarea type="text" name="listing[description]" ><%= listing.description %></textarea>
-        <br>
-        <input type="text" name="listing[image]" value="<%= listing.image.url %>">
-        <br>
-        <input type="number" name="listing[price]" value="<%= listing.price %>">
-        <br>
-        <input type="text" name="listing[location]" value="<%= listing.location %>">
-        <br>
-        <input type="text" name="listing[country]" value="<%= listing.country %>">
-        <br>
-        <button>Edit</button>
-    </form>
-</body>
-</html>
+<% layout("/layouts/boilerplate") %>
+
+    <div class="edit-listing-page">
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <div class="progress-steps">
+                <span class="step active" data-step="1">
+                    <i class="fa-solid fa-home"></i>
+                    <span class="step-text">Basic Info</span>
+                </span>
+                <span class="step active" data-step="2">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span class="step-text">Location</span>
+                </span>
+                <span class="step active" data-step="3">
+                    <i class="fa-solid fa-camera"></i>
+                    <span class="step-text">Images</span>
+                </span>
+                <span class="step active" data-step="4">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span class="step-text">Details</span>
+                </span>
+                <span class="step active" data-step="5">
+                    <i class="fa-solid fa-concierge-bell"></i>
+                    <span class="step-text">Amenities</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="edit-container">
+            <!-- Enhanced Header -->
+            <div class="edit-header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fa-solid fa-edit"></i>
+                    </div>
+                    <div class="header-text">
+                        <h1>Edit Your Listing</h1>
+                        <p>Update your property details to attract more guests</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a href="/listings/<%= listing._id %>" class="btn-secondary view-btn">
+                        <i class="fa-solid fa-eye"></i>
+                        <span>View Listing</span>
+                    </a>
+                    <div class="listing-status">
+                        <span class="status-badge">
+                            <i class="fa-solid fa-circle-dot"></i>
+                            Active
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="post" class="edit-form" id="editForm">
+                <!-- Basic Information -->
+                <div class="form-section" data-section="basic">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa-solid fa-home"></i>
+                        </div>
+                        <div class="section-content">
+                            <h2 class="section-title">Basic Information</h2>
+                            <p class="section-desc">Tell guests about your property</p>
+                        </div>
+                        <div class="section-number">1</div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="title" class="form-label">
+                                <i class="fa-solid fa-tag"></i>
+                                Property Title <span class="required">*</span>
+                            </label>
+                            <input type="text" id="title" name="listing[title]" value="<%= listing.title %>"
+                                class="form-input" placeholder="e.g., Cozy Mountain Cabin" required>
+                            <div class="form-help">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                Choose a descriptive title that highlights your property's best features
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price" class="form-label">
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                                Price per Night <span class="required">*</span>
+                            </label>
+                            <div class="price-input-wrapper">
+                                <span class="currency-symbol">₹</span>
+                                <input type="number" id="price" name="listing[price]" value="<%= listing.price %>"
+                                    class="form-input price-input" placeholder="0" min="1" required>
+                            </div>
+                            <div class="form-help">
+                                <i class="fa-solid fa-chart-line"></i>
+                                Set a competitive price based on similar properties in your area
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="description" class="form-label">
+                                <i class="fa-solid fa-align-left"></i>
+                                Description <span class="required">*</span>
+                            </label>
+                            <textarea id="description" name="listing[description]" class="form-textarea" rows="6"
+                                placeholder="Describe your property, its amenities, and what makes it special..."
+                                required><%= listing.description %></textarea>
+                            <div class="form-help">
+                                <i class="fa-solid fa-info-circle"></i>
+                                Provide detailed information about your property, including amenities, rules, and nearby
+                                attractions
+                            </div>
+                            <div class="char-counter">
+                                <span id="charCount">0</span>/500 characters
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Location Information -->
+                <div class="form-section" data-section="location">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div class="section-content">
+                            <h2 class="section-title">Location Details</h2>
+                            <p class="section-desc">Where is your property located?</p>
+                        </div>
+                        <div class="section-number">2</div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="location" class="form-label">
+                                <i class="fa-solid fa-map-marker-alt"></i>
+                                City/Area <span class="required">*</span>
+                            </label>
+                            <input type="text" id="location" name="listing[location]" value="<%= listing.location %>"
+                                class="form-input" placeholder="e.g., Shimla, Himachal Pradesh" required>
+                            <div class="form-help">
+                                <i class="fa-solid fa-search"></i>
+                                Enter the specific location where guests will stay
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country" class="form-label">
+                                <i class="fa-solid fa-globe"></i>
+                                Country <span class="required">*</span>
+                            </label>
+                            <input type="text" id="country" name="listing[country]" value="<%= listing.country %>"
+                                class="form-input" placeholder="e.g., India" required>
+                            <div class="form-help">
+                                <i class="fa-solid fa-flag"></i>
+                                Country where your property is located
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="form-section" data-section="images">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                        <div class="section-content">
+                            <h2 class="section-title">Property Images</h2>
+                            <p class="section-desc">Showcase your property with high-quality photos</p>
+                        </div>
+                        <div class="section-number">3</div>
+                    </div>
+
+                    <div class="image-upload-section">
+                        <div class="current-image-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fa-solid fa-image"></i>
+                                    Current Image
+                                </h3>
+                            </div>
+                            <div class="image-preview-container">
+                                <div class="image-preview">
+                                    <img src="<%= listing.image.url %>" alt="Current property image" class="preview-img"
+                                        id="currentImage">
+                                    <div class="image-overlay">
+                                        <div class="image-info">
+                                            <i class="fa-solid fa-check-circle"></i>
+                                            <span>Current Image</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="new-image-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fa-solid fa-upload"></i>
+                                    Update Image
+                                </h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrl" class="form-label">
+                                    <i class="fa-solid fa-link"></i>
+                                    Image URL
+                                </label>
+                                <input type="url" id="imageUrl" name="listing[image][url]"
+                                    value="<%= listing.image.url %>" class="form-input"
+                                    placeholder="https://example.com/image.jpg">
+                                <div class="form-help">
+                                    <i class="fa-solid fa-info-circle"></i>
+                                    Enter a direct link to your property image (JPG, PNG, WebP)
+                                </div>
+                            </div>
+                            <div class="image-preview-container">
+                                <div class="image-preview" id="newImagePreview">
+                                    <div class="preview-placeholder">
+                                        <i class="fa-solid fa-cloud-upload-alt"></i>
+                                        <p>Image preview will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Details -->
+                <div class="form-section" data-section="details">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa-solid fa-info-circle"></i>
+                        </div>
+                        <div class="section-content">
+                            <h2 class="section-title">Property Details</h2>
+                            <p class="section-desc">Additional information about your property</p>
+                        </div>
+                        <div class="section-number">4</div>
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fa-solid fa-bed"></i>
+                            </div>
+                            <div class="detail-content">
+                                <label class="detail-label">Bedrooms</label>
+                                <input type="number" name="listing[bedrooms]" value="<%= listing.bedrooms || 1 %>"
+                                    class="detail-input" min="1" max="20">
+                                <div class="detail-help">Number of bedrooms available</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fa-solid fa-bath"></i>
+                            </div>
+                            <div class="detail-content">
+                                <label class="detail-label">Bathrooms</label>
+                                <input type="number" name="listing[bathrooms]" value="<%= listing.bathrooms || 1 %>"
+                                    class="detail-input" min="1" max="20">
+                                <div class="detail-help">Number of bathrooms available</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="detail-content">
+                                <label class="detail-label">Max Guests</label>
+                                <input type="number" name="listing[maxGuests]" value="<%= listing.maxGuests || 2 %>"
+                                    class="detail-input" min="1" max="50">
+                                <div class="detail-help">Maximum number of guests allowed</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-icon">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                            </div>
+                            <div class="detail-content">
+                                <label class="detail-label">Area (sq ft)</label>
+                                <input type="number" name="listing[area]" value="<%= listing.area || 500 %>"
+                                    class="detail-input" min="50" max="10000">
+                                <div class="detail-help">Total area of the property</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amenities -->
+                <div class="form-section" data-section="amenities">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa-solid fa-concierge-bell"></i>
+                        </div>
+                        <div class="section-content">
+                            <h2 class="section-title">Amenities & Features</h2>
+                            <p class="section-desc">What amenities does your property offer?</p>
+                        </div>
+                        <div class="section-number">5</div>
+                    </div>
+
+                    <div class="amenities-container">
+                        <div class="amenities-grid">
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('wifi')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="wifi" <%=(listing.amenities &&
+                                    listing.amenities.includes('wifi')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-wifi"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">WiFi</span>
+                                        <span class="amenity-desc">High-speed internet</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('kitchen')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="kitchen" <%=(listing.amenities
+                                    && listing.amenities.includes('kitchen')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-kitchen-set"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Kitchen</span>
+                                        <span class="amenity-desc">Fully equipped kitchen</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('parking')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="parking" <%=(listing.amenities
+                                    && listing.amenities.includes('parking')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-car"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Parking</span>
+                                        <span class="amenity-desc">Free parking available</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('pool')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="pool" <%=(listing.amenities &&
+                                    listing.amenities.includes('pool')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-swimming-pool"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Pool</span>
+                                        <span class="amenity-desc">Swimming pool access</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('gym')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="gym" <%=(listing.amenities &&
+                                    listing.amenities.includes('gym')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-dumbbell"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Gym</span>
+                                        <span class="amenity-desc">Fitness center access</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('ac')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="ac" <%=(listing.amenities &&
+                                    listing.amenities.includes('ac')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-air-conditioning"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Air Conditioning</span>
+                                        <span class="amenity-desc">Climate control</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('tv')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="tv" <%=(listing.amenities &&
+                                    listing.amenities.includes('tv')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-tv"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Smart TV</span>
+                                        <span class="amenity-desc">Entertainment system</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <label
+                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('washer')) ? 'selected' : '' %>">
+                                <input type="checkbox" name="listing[amenities]" value="washer" <%=(listing.amenities &&
+                                    listing.amenities.includes('washer')) ? 'checked' : '' %>>
+                                <div class="amenity-content">
+                                    <div class="amenity-icon">
+                                        <i class="fa-solid fa-shirt"></i>
+                                    </div>
+                                    <div class="amenity-text">
+                                        <span class="amenity-name">Washer</span>
+                                        <span class="amenity-desc">Laundry facilities</span>
+                                    </div>
+                                </div>
+                                <div class="checkmark">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="action-buttons">
+                        <a href="/listings/<%= listing._id %>" class="btn-secondary cancel-btn">
+                            <i class="fa-solid fa-times"></i>
+                            <span>Cancel</span>
+                        </a>
+                        <button type="button" class="btn-secondary preview-btn" onclick="previewChanges()">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Preview</span>
+                        </button>
+                        <button type="submit" class="btn-primary save-btn">
+                            <i class="fa-solid fa-save"></i>
+                            <span>Save Changes</span>
+                            <div class="btn-loader" style="display: none;">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="action-help">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span>Your changes will be saved and your listing will be updated immediately.</span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage" style="display: none;">
+                <div class="success-content">
+                    <div class="success-icon">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <div class="success-text">
+                        <h3>Changes Saved Successfully!</h3>
+                        <p>Your listing has been updated and is now live.</p>
+                    </div>
+                    <button class="success-close" onclick="hideSuccessMessage()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character counter for description
+        document.getElementById('description').addEventListener('input', function (e) {
+            const charCount = e.target.value.length;
+            const counter = document.getElementById('charCount');
+            counter.textContent = charCount;
+
+            if (charCount > 450) {
+                counter.style.color = '#dc2626';
+            } else if (charCount > 400) {
+                counter.style.color = '#f59e0b';
+            } else {
+                counter.style.color = '#64748b';
+            }
+        });
+
+        // Initialize character count on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const description = document.getElementById('description');
+            const charCount = description.value.length;
+            document.getElementById('charCount').textContent = charCount;
+        });
+
+        // Enhanced image URL preview functionality
+        document.getElementById('imageUrl').addEventListener('input', function (e) {
+            const url = e.target.value.trim();
+            const newPreview = document.getElementById('newImagePreview');
+
+            if (url) {
+                // Show loading state
+                newPreview.innerHTML = `
+                <div class="preview-loading">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading preview...</p>
+                </div>
+            `;
+
+                // Create image to test URL
+                const testImg = new Image();
+                testImg.onload = function () {
+                    newPreview.innerHTML = `
+                    <img src="${url}" alt="New property image" class="preview-img">
+                    <div class="image-overlay">
+                        <div class="image-info">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <span>New Image</span>
+                        </div>
+                    </div>
+                `;
+                };
+                testImg.onerror = function () {
+                    newPreview.innerHTML = `
+                    <div class="preview-error">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <p>Invalid image URL</p>
+                        <small>Please enter a valid image link</small>
+                    </div>
+                `;
+                };
+                testImg.src = url;
+            } else {
+                newPreview.innerHTML = `
+                <div class="preview-placeholder">
+                    <i class="fa-solid fa-cloud-upload-alt"></i>
+                    <p>Image preview will appear here</p>
+                </div>
+            `;
+            }
+        });
+
+        // Enhanced form validation
+        document.getElementById('editForm').addEventListener('submit', function (e) {
+            const requiredFields = document.querySelectorAll('input[required], textarea[required]');
+            let isValid = true;
+            let firstError = null;
+
+            requiredFields.forEach(field => {
+                const value = field.value.trim();
+                if (!value) {
+                    field.classList.add('error');
+                    if (!firstError) firstError = field;
+                    isValid = false;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            // Additional validation for description length
+            const description = document.getElementById('description');
+            if (description.value.length > 500) {
+                description.classList.add('error');
+                isValid = false;
+                if (!firstError) firstError = description;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                if (firstError) {
+                    firstError.focus();
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                showErrorMessage('Please fill in all required fields and ensure the description is under 500 characters.');
+                return false;
+            }
+
+            // Show loading state
+            const submitBtn = document.querySelector('.save-btn');
+            const btnText = submitBtn.querySelector('span');
+            const btnLoader = submitBtn.querySelector('.btn-loader');
+
+            submitBtn.disabled = true;
+            btnText.style.opacity = '0';
+            btnLoader.style.display = 'block';
+
+            // The form will submit normally, success handling is done via redirect
+        });
+
+        // Remove error class on input
+        document.querySelectorAll('input, textarea').forEach(field => {
+            field.addEventListener('input', function () {
+                if (this.value.trim()) {
+                    this.classList.remove('error');
+                }
+            });
+        });
+
+        // Amenity card interactions
+        document.querySelectorAll('.amenity-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected', checkbox.checked);
+                }
+            });
+        });
+
+        // Update amenity card states on checkbox change
+        document.querySelectorAll('.amenity-card input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                this.closest('.amenity-card').classList.toggle('selected', this.checked);
+            });
+        });
+
+        // Preview changes function
+        function previewChanges() {
+            const formData = new FormData(document.getElementById('editForm'));
+            const preview = {
+                title: formData.get('listing[title]'),
+                price: formData.get('listing[price]'),
+                description: formData.get('listing[description]'),
+                location: formData.get('listing[location]'),
+                country: formData.get('listing[country]'),
+                image: { url: formData.get('listing[image][url]') },
+                bedrooms: formData.get('listing[bedrooms]'),
+                bathrooms: formData.get('listing[bathrooms]'),
+                maxGuests: formData.get('listing[maxGuests]'),
+                area: formData.get('listing[area]'),
+                amenities: formData.getAll('listing[amenities]')
+            };
+
+            // Open preview in new window/tab
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Preview - ${preview.title}</title>
+                <link rel="stylesheet" href="/css/style.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+                <style>
+                    body { background: #f8fafc; padding: 20px; }
+                    .preview-container { max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                    .preview-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px; }
+                    .preview-content { padding: 24px; }
+                </style>
+            </head>
+            <body>
+                <div class="preview-container">
+                    <div class="preview-header">
+                        <h1>${preview.title}</h1>
+                        <p><i class="fa-solid fa-location-dot"></i> ${preview.location}, ${preview.country}</p>
+                        <p class="price">₹${preview.price} per night</p>
+                    </div>
+                    <div class="preview-content">
+                        <img src="${preview.image.url}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                        <p>${preview.description}</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 20px;">
+                            <div><i class="fa-solid fa-bed"></i> ${preview.bedrooms} Bedrooms</div>
+                            <div><i class="fa-solid fa-bath"></i> ${preview.bathrooms} Bathrooms</div>
+                            <div><i class="fa-solid fa-users"></i> ${preview.maxGuests} Guests</div>
+                            <div><i class="fa-solid fa-ruler-combined"></i> ${preview.area} sq ft</div>
+                        </div>
+                        ${preview.amenities.length > 0 ? `<div style="margin-top: 20px;"><h3>Amenities:</h3><div>${preview.amenities.map(a => `<span style="background: #f0f4f8; padding: 4px 8px; border-radius: 4px; margin: 2px; display: inline-block;">${a}</span>`).join('')}</div></div>` : ''}
+                    </div>
+                </div>
+            </body>
+            </html>
+        `);
+        }
+
+        // Error message function
+        function showErrorMessage(message) {
+            // Create error toast
+            const toast = document.createElement('div');
+            toast.className = 'error-toast';
+            toast.innerHTML = `
+            <div class="error-content">
+                <i class="fa-solid fa-exclamation-circle"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        `;
+            document.body.appendChild(toast);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 5000);
+        }
+
+        // Success message functions
+        function showSuccessMessage() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            successMsg.style.animation = 'slideIn 0.3s ease-out';
+            setTimeout(() => {
+                hideSuccessMessage();
+            }, 3000);
+        }
+
+        function hideSuccessMessage() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 300);
+        }
+
+        // Smooth scrolling for section navigation
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('click', function () {
+                const sectionName = this.dataset.step;
+                const section = document.querySelector(`[data-section="${getSectionName(sectionName)}"]`);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        function getSectionName(step) {
+            const sections = {
+                '1': 'basic',
+                '2': 'location',
+                '3': 'images',
+                '4': 'details',
+                '5': 'amenities'
+            };
+            return sections[step] || 'basic';
+        }
+
+        // Add loading animation for form submission
+        document.getElementById('editForm').addEventListener('submit', function () {
+            // This will show loading state as defined above
+        });
+    </script>
