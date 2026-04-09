@@ -5,21 +5,28 @@
         <!-- Header -->
         <div class="edit-header">
             <div class="header-content">
-                <h1>Create New Listing</h1>
-                <p>Add your property to help guests discover amazing places to stay</p>
+                <div class="header-icon">
+                    <i class="fa-solid fa-building-circle-check"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Create New Listing</h1>
+                    <p>Add your property to help guests discover amazing places to stay</p>
+                </div>
             </div>
         </div>
 
         <!-- Create Form -->
-        <form action="/listings" method="post" class="edit-form">
+        <form action="/listings" method="post" novalidate class="edit-form needs-validation">
             <!-- Basic Information -->
             <div class="form-section">
                 <div class="section-header">
-                    <h2 class="section-title">
+                    <div class="section-icon">
                         <i class="fa-solid fa-home"></i>
-                        Basic Information
-                    </h2>
-                    <p class="section-desc">Tell guests about your property</p>
+                    </div>
+                    <div class="section-content">
+                        <h2 class="section-title">Basic Information</h2>
+                        <p class="section-desc">Tell guests about your property</p>
+                    </div>
                 </div>
 
                 <div class="form-grid">
@@ -56,47 +63,47 @@
                         </div>
                         <div class="form-help">Set a competitive price based on similar properties in your area</div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="description" class="form-label">
-                        Description <span class="required">*</span>
-                    </label>
-                    <textarea
-                        id="description"
-                        name="listing[description]"
-                        class="form-textarea"
-                        rows="6"
-                        placeholder="Describe your property, its amenities, and what makes it special..."
-                        required
-                    ></textarea>
-                    <div class="form-help">Provide detailed information about your property, including amenities, rules, and nearby attractions</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="imageUrl" class="form-label">
-                        Property Image URL <span class="required">*</span>
-                    </label>
-                    <input
-                        type="url"
-                        id="imageUrl"
-                        name="listing[image][url]"
-                        class="form-input"
-                        placeholder="https://example.com/property-image.jpg"
-                        required
-                    >
-                    <div class="form-help">Enter a direct link to a high-quality image of your property</div>
+                    <div class="form-group">
+                        <label for="description" class="form-label">
+                            Description <span class="required">*</span>
+                        </label>
+                        <textarea
+                            id="description"
+                            name="listing[description]"
+                            class="form-textarea"
+                            rows="6"
+                            placeholder="Describe your property, its amenities, and what makes it special..."
+                            required
+                        ></textarea>
+                        <div class="form-help">Provide detailed information about your property, including amenities, rules, and nearby attractions</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageUrl" class="form-label">
+                            Property Image URL <span class="required">*</span>
+                        </label>
+                        <input
+                            type="url"
+                            id="imageUrl"
+                            name="listing[image][url]"
+                            class="form-input"
+                            placeholder="https://example.com/property-image.jpg"
+                            required
+                        >
+                        <div class="form-help">Enter a direct link to a high-quality image of your property</div>
+                    </div>
                 </div>
             </div>
 
             <!-- Location Information -->
             <div class="form-section">
                 <div class="section-header">
-                    <h2 class="section-title">
+                    <div class="section-icon">
                         <i class="fa-solid fa-location-dot"></i>
-                        Location
-                    </h2>
-                    <p class="section-desc">Where is your property located?</p>
+                    </div>
+                    <div class="section-content">
+                        <h2 class="section-title">Location</h2>
+                        <p class="section-desc">Where is your property located?</p>
+                    </div>
                 </div>
 
                 <div class="form-grid">
@@ -135,11 +142,13 @@
             <!-- Property Details -->
             <div class="form-section">
                 <div class="section-header">
-                    <h2 class="section-title">
+                    <div class="section-icon">
                         <i class="fa-solid fa-info-circle"></i>
-                        Property Details
-                    </h2>
-                    <p class="section-desc">Additional information about your property</p>
+                    </div>
+                    <div class="section-content">
+                        <h2 class="section-title">Property Details</h2>
+                        <p class="section-desc">Additional information about your property</p>
+                    </div>
                 </div>
 
                 <div class="details-grid">
@@ -180,66 +189,68 @@
             <!-- Amenities -->
             <div class="form-section">
                 <div class="section-header">
-                    <h2 class="section-title">
+                    <div class="section-icon">
                         <i class="fa-solid fa-concierge-bell"></i>
-                        Amenities
-                    </h2>
-                    <p class="section-desc">What amenities does your property offer?</p>
+                    </div>
+                    <div class="section-content">
+                        <h2 class="section-title">Amenities</h2>
+                        <p class="section-desc">What amenities does your property offer?</p>
+                    </div>
                 </div>
 
                 <div class="amenities-grid">
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="wifi">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-wifi"></i>
                         WiFi
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="kitchen">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-kitchen-set"></i>
                         Kitchen
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="parking">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-car"></i>
                         Parking
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="pool">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-swimming-pool"></i>
                         Pool
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="gym">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-dumbbell"></i>
                         Gym
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="ac">
-                        <span class="checkmark"></span>
-                        <i class="fa-solid fa-air-conditioning"></i>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                        <i class="fa-solid fa-fan"></i>
                         Air Conditioning
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="tv">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-tv"></i>
                         Smart TV
                     </label>
 
                     <label class="amenity-checkbox">
                         <input type="checkbox" name="listing[amenities]" value="washer">
-                        <span class="checkmark"></span>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
                         <i class="fa-solid fa-shirt"></i>
                         Washer
                     </label>
@@ -265,10 +276,20 @@
         const requiredFields = document.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
 
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+
         requiredFields.forEach(field => {
+            const formGroup = field.closest('.form-group');
             if (!field.value.trim()) {
                 field.classList.add('error');
                 isValid = false;
+
+                // Add error message below the field
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = `${field.name.replace('listing[', '').replace(']', '')} is required`;
+                formGroup.appendChild(errorMessage);
             } else {
                 field.classList.remove('error');
             }
@@ -276,7 +297,11 @@
 
         if (!isValid) {
             e.preventDefault();
-            alert('Please fill in all required fields.');
+            // Scroll to first error
+            const firstError = document.querySelector('.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
     });
 

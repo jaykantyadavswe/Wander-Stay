@@ -915,6 +915,9 @@ body {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
     min-height: 100vh;
     padding: 40px 0;
+    margin-top: 2rem;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
 }
 
 /* Progress Indicator */
@@ -1268,6 +1271,28 @@ body {
     flex-shrink: 0;
 }
 
+/* Error Messages */
+.error-message {
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: fadeInError 0.3s ease-in-out;
+}
+
+.error-message::before {
+    content: '⚠️';
+    font-size: 0.8rem;
+}
+
+@keyframes fadeInError {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Character Counter */
 .char-counter {
     text-align: right;
@@ -1544,6 +1569,79 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
+    padding: 25px;
+}
+
+.amenity-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: #ffffff;
+    border: 1px solid rgba(229, 231, 235, 0.95);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    min-height: 74px;
+}
+
+.amenity-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.amenity-checkbox .checkmark {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(229, 231, 235, 1);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    transition: all 0.25s ease;
+    color: transparent;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.amenity-checkbox .checkmark i {
+    font-size: 0.75rem;
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform: scale(0.85);
+}
+
+.amenity-checkbox i.fa-solid:not(.checkmark i) {
+    color: #dc2626;
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.amenity-checkbox:hover {
+    transform: translateY(-1px);
+    border-color: rgba(220, 38, 38, 0.4);
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.08);
+}
+
+.amenity-checkbox input:checked + .checkmark {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.amenity-checkbox input:checked + .checkmark i {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.amenity-checkbox input:checked ~ i.fa-solid {
+    color: #991b1b;
+}
+
+.amenity-checkbox:hover .checkmark {
+    border-color: rgba(220, 38, 38, 0.8);
 }
 
 .amenity-card {
