@@ -302,156 +302,39 @@
                         </div>
                         <div class="section-content">
                             <h2 class="section-title">Amenities & Features</h2>
-                            <p class="section-desc">What amenities does your property offer?</p>
+                            <p class="section-desc">Select the amenities and features your property includes.</p>
                         </div>
                         <div class="section-number">5</div>
                     </div>
 
                     <div class="amenities-container">
+                        <div class="section-note">
+                            Choose all that apply so guests can see what makes your listing stand out.
+                        </div>
+
+                        <% const amenityOptions = [
+                            { value: 'wifi', icon: 'fa-wifi', label: 'WiFi', description: 'High-speed internet' },
+                            { value: 'kitchen', icon: 'fa-kitchen-set', label: 'Kitchen', description: 'Fully equipped kitchen' },
+                            { value: 'parking', icon: 'fa-car', label: 'Parking', description: 'Free parking available' },
+                            { value: 'pool', icon: 'fa-swimming-pool', label: 'Pool', description: 'Swimming pool access' },
+                            { value: 'gym', icon: 'fa-dumbbell', label: 'Gym', description: 'Fitness center access' },
+                            { value: 'ac', icon: 'fa-fan', label: 'Air Conditioning', description: 'Climate control' },
+                            { value: 'tv', icon: 'fa-tv', label: 'Smart TV', description: 'Entertainment system' },
+                            { value: 'washer', icon: 'fa-shirt', label: 'Washer', description: 'Laundry facilities' }
+                        ]; %>
+
                         <div class="amenities-grid">
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('wifi')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="wifi" <%=(listing.amenities &&
-                                    listing.amenities.includes('wifi')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-wifi"></i>
-                                    </div>
+                            <% amenityOptions.forEach(option => { %>
+                                <label class="amenity-checkbox">
+                                    <input type="checkbox" name="listing[amenities]" value="<%= option.value %>" <%= (listing.amenities && listing.amenities.includes(option.value)) ? 'checked' : '' %> />
+                                    <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                                    <i class="fa-solid <%= option.icon %>"></i>
                                     <div class="amenity-text">
-                                        <span class="amenity-name">WiFi</span>
-                                        <span class="amenity-desc">High-speed internet</span>
+                                        <span class="amenity-name"><%= option.label %></span>
+                                        <span class="amenity-desc"><%= option.description %></span>
                                     </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('kitchen')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="kitchen" <%=(listing.amenities
-                                    && listing.amenities.includes('kitchen')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-kitchen-set"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Kitchen</span>
-                                        <span class="amenity-desc">Fully equipped kitchen</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('parking')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="parking" <%=(listing.amenities
-                                    && listing.amenities.includes('parking')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-car"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Parking</span>
-                                        <span class="amenity-desc">Free parking available</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('pool')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="pool" <%=(listing.amenities &&
-                                    listing.amenities.includes('pool')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-swimming-pool"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Pool</span>
-                                        <span class="amenity-desc">Swimming pool access</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('gym')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="gym" <%=(listing.amenities &&
-                                    listing.amenities.includes('gym')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-dumbbell"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Gym</span>
-                                        <span class="amenity-desc">Fitness center access</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('ac')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="ac" <%=(listing.amenities &&
-                                    listing.amenities.includes('ac')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-air-conditioning"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Air Conditioning</span>
-                                        <span class="amenity-desc">Climate control</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('tv')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="tv" <%=(listing.amenities &&
-                                    listing.amenities.includes('tv')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-tv"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Smart TV</span>
-                                        <span class="amenity-desc">Entertainment system</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <label
-                                class="amenity-card <%= (listing.amenities && listing.amenities.includes('washer')) ? 'selected' : '' %>">
-                                <input type="checkbox" name="listing[amenities]" value="washer" <%=(listing.amenities &&
-                                    listing.amenities.includes('washer')) ? 'checked' : '' %>>
-                                <div class="amenity-content">
-                                    <div class="amenity-icon">
-                                        <i class="fa-solid fa-shirt"></i>
-                                    </div>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name">Washer</span>
-                                        <span class="amenity-desc">Laundry facilities</span>
-                                    </div>
-                                </div>
-                                <div class="checkmark">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
+                                </label>
+                            <% }) %>
                         </div>
                     </div>
                 </div>
@@ -630,6 +513,7 @@
         document.querySelectorAll('.amenity-card').forEach(card => {
             card.addEventListener('click', function (e) {
                 if (e.target.type !== 'checkbox') {
+                    e.preventDefault();
                     const checkbox = this.querySelector('input[type="checkbox"]');
                     checkbox.checked = !checkbox.checked;
                     this.classList.toggle('selected', checkbox.checked);
