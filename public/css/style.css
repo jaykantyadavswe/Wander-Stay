@@ -2733,6 +2733,183 @@ body {
     margin: 0;
 }
 
+/* Review Actions */
+.review-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-link:hover {
+    background: rgba(220, 38, 38, 0.1);
+    color: #b91c1c;
+}
+
+.btn-link i {
+    font-size: 0.75rem;
+}
+
+/* No Reviews State */
+.no-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px dashed rgba(229, 231, 235, 1);
+}
+
+.no-reviews i {
+    font-size: 3rem;
+    color: #cbd5e1;
+    margin-bottom: 16px;
+}
+
+.no-reviews h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.no-reviews p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Review Form Section */
+.review-form-section {
+    margin-top: 40px;
+}
+
+.review-form {
+    background: #ffffff;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.review-form .form-group {
+    margin-bottom: 24px;
+}
+
+.review-form label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.rating-input {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stars {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.stars i {
+    font-size: 1.5rem;
+    color: #cc2121;
+    transition: all 0.2s ease;
+}
+
+.stars i:hover,
+.stars i.active {
+    color: #f59e0b;
+    transform: scale(1.1);
+}
+
+.rating-text {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.review-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-help {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.submit-review-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-review-btn:hover {
+    background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    transform: translateY(-2px);
+}
+
+.cancel-review-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid rgba(229, 231, 235, 1);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-review-btn:hover {
+    background: #e2e8f0;
+    border-color: rgba(219, 234, 254, 1);
+    color: #475569;
+}
+
 /* Location Section */
 .map-placeholder {
     width: 100%;
@@ -3028,6 +3205,33 @@ body {
         grid-template-columns: 1fr;
         gap: 12px;
     }
+
+    .review-form {
+        padding: 24px;
+    }
+
+    .stars {
+        gap: 6px;
+    }
+
+    .stars i {
+        font-size: 1.3rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .submit-review-btn,
+    .cancel-review-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .review-actions {
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -3106,6 +3310,22 @@ body {
 
     .details-grid {
         grid-template-columns: 1fr;
+    }
+
+    .review-form {
+        padding: 20px;
+    }
+
+    .stars i {
+        font-size: 1.2rem;
+    }
+
+    .no-reviews {
+        padding: 30px 15px;
+    }
+
+    .no-reviews i {
+        font-size: 2.5rem;
     }
 }
 

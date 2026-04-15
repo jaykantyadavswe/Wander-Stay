@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Review = require("./review.js")
 
 const listingSchema = new Schema({
     title: {
@@ -51,8 +52,36 @@ const listingSchema = new Schema({
     amenities: [{
         type: String,
         enum: ['wifi', 'kitchen', 'parking', 'pool', 'gym', 'ac', 'tv', 'washer', 'heating', 'fireplace']
+    }],
+    reviews: [{
+        type: Schema.Types.ObjectId,
+        ref: "Review"
     }]
 });
+
+listingSchema.post("findOneAndDelete", async(listing) => {
+    if(listing){
+        await Review.deleteMany({_id: {$in: listing.reviews}});
+    }
+})
+
+// Virtual for calculating average rating
+listingSchema.virtual('averageRating').get(function() {
+    if (this.reviews && this.reviews.length > 0) {
+        const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+        return (sum / this.reviews.length).toFixed(1);
+    }
+    return 0;
+});
+
+// Virtual for getting review count
+listingSchema.virtual('reviewCount').get(function() {
+    return this.reviews ? this.reviews.length : 0;
+});
+
+// Ensure virtual fields are serialized
+listingSchema.set('toJSON', { virtuals: true });
+listingSchema.set('toObject', { virtuals: true });
 
 const Listing = mongoose.model("Listing", listingSchema);
 module.exports = Listing;

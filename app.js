@@ -2,12 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const {listingSchema} = require("./Schema.js");
+const {listingSchema, reviewSchema} = require("./Schema.js");
 
 const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderStay';
 
@@ -44,6 +45,16 @@ const validateListing = (req, res, next) => {
     }
 }
 
+const validateReview = (req, res, next) => {
+    let {error} = reviewSchema.validate(req.body);
+    if(error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }else{
+        next();
+    }
+}
+
 // Index Route
 app.get("/listings", wrapAsync(async (req, res) => {
     const allListings = await Listing.find({});
@@ -58,7 +69,7 @@ app.get("/listings/new", (req, res) => {
 // Show Route
 app.get("/listings/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate('reviews');
     res.render("listings/show.ejs", { listing })
 }));
 
@@ -91,6 +102,32 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }));
 
+// Review Routes
+// Create Review
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const listing = await Listing.findById(id);
+    const newReview = new Review(req.body.review);
+    newReview.listing = listing;
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${id}`);
+}));
+
+// Delete Review
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`);
+}));
+
 
 /* app.get("/testListing", async(req, res) => {
     let sampleListing = new Listing({
@@ -105,6 +142,48 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     console.log("sample was saved");
     res.send("successful test");
 }); */
+
+// Test route to add sample reviews
+app.get("/testReviews", wrapAsync(async (req, res) => {
+    // Get the first listing
+    const listing = await Listing.findOne();
+
+    if (!listing) {
+        return res.send("No listings found. Create a listing first.");
+    }
+
+    // Create sample reviews
+    const review1 = new Review({
+        author: "John Doe",
+        rating: 5,
+        comment: "Amazing place! The host was very welcoming and the property is exactly as shown in the pictures. Great location near the city center."
+    });
+
+    const review2 = new Review({
+        author: "Jane Smith",
+        rating: 4,
+        comment: "Perfect for a weekend getaway! Everything was clean and well-maintained. Would definitely come back."
+    });
+
+    const review3 = new Review({
+        author: "Mike Johnson",
+        rating: 5,
+        comment: "Exceeded my expectations! The amenities were top-notch and the view was breathtaking."
+    });
+
+    review1.listing = listing;
+    review2.listing = listing;
+    review3.listing = listing;
+
+    listing.reviews.push(review1, review2, review3);
+
+    await review1.save();
+    await review2.save();
+    await review3.save();
+    await listing.save();
+
+    res.send("Sample reviews added successfully!");
+}));
 
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found!"));
