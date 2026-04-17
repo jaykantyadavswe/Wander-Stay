@@ -1,0 +1,42 @@
+<% if ((success && success.length) || (error && error.length)) { %>
+    <div class="flash-wrapper" role="status" aria-live="polite">
+        <% if (success && success.length) { %>
+            <div class="flash-message flash-success">
+                <div class="flash-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="flash-content">
+                    <p><%= success[0] %></p>
+                </div>
+                <button class="flash-close" type="button" onclick="dismissFlash()" aria-label="Dismiss notification">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        <% } %>
+        <% if (error && error.length) { %>
+            <div class="flash-message flash-error">
+                <div class="flash-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+                <div class="flash-content">
+                    <p><%= error[0] %></p>
+                </div>
+                <button class="flash-close" type="button" onclick="dismissFlash()" aria-label="Dismiss notification">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        <% } %>
+    </div>
+    <script>
+        function dismissFlash() {
+            const flash = document.querySelector('.flash-message');
+            if (!flash) return;
+            flash.classList.add('flash-hide');
+            setTimeout(() => flash.remove(), 220);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const flash = document.querySelector('.flash-message');
+            if (!flash) return;
+            setTimeout(() => {
+                flash.classList.add('flash-hide');
+                setTimeout(() => flash.remove(), 220);
+            }, 6000);
+        });
+    </script>
+<% } %> 
