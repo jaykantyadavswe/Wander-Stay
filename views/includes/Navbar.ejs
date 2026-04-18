@@ -19,14 +19,36 @@
     </div>
 
     <div class="navbar-right d-flex align-items-center gap-3">
-        <button class="host-btn" type="button">Sewa Your House</button>
+        <a href="/listings/new"><button class="host-btn" type="button">Sewa Your House</button></a>
         <button class="icon-circle" type="button">
             <i class="fa-regular fa-flag"></i>
         </button>
         <button class="profile-menu" type="button">
             <div class="avatar"></div>
-            <span>Guest</span>
+            <% if(currUser){ %>
+                <span><%= currUser.name %></span>
+                <% {style="display: block"} %>
+            <% } else { %>
+                <span>Guest</span>
+            <% } %>
             <i class="fa-solid fa-bars"></i>
         </button>
     </div>
 </nav>
+
+<script>
+    const profileMenu = document.querySelector('.profile-menu');
+    const avatar = document.querySelector('.avatar');
+    const guestName = document.querySelector('.profile-menu span');
+
+    if (`<%= currUser ? 'true' : 'false' %>` === 'true') {
+        avatar.style.display = 'block';
+        guestName.style.display = 'block';
+        profileMenu.classList.add('profile-menuLoggedIn');
+        guestName.textContent = 'John Doe'; // Replace with actual user name
+    } else {
+        avatar.style.display = 'none';
+        guestName.style.display = 'none';
+        profileMenu.classList.remove('profile-menuLoggedIn');
+    }
+</script>
