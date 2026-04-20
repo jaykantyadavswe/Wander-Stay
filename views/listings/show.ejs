@@ -66,7 +66,7 @@
                         <div class="listing-meta">
                             <span class="rating">
                                 <i class="fa-solid fa-star"></i>
-                                <%= listing.averageRating %> (<%= listing.reviewCount %> reviews)
+                                <%= listing.averageRating = 4.5 %> (<%= listing.reviewCount = 5 %> reviews)
                             </span>
                             <span class="location-tag">
                                 <i class="fa-solid fa-location-dot"></i>
@@ -233,11 +233,11 @@
                                     <div class="review-header">
                                         <div class="reviewer-info">
                                             <div class="reviewer-avatar">
-                                                <%= review.author.charAt(0).toUpperCase() %>
+                                                <%= review.author.username.charAt(0).toUpperCase() %>
                                             </div>
                                             <div>
                                                 <h4>
-                                                    <%= review.author %>
+                                                    <%= review.author.username %>
                                                 </h4>
                                                 <p>
                                                     <%= new Date(review.createdAt).toLocaleDateString('en-US', {
@@ -247,7 +247,7 @@
                                         </div>
                                         <div class="review-rating">
                                             <% for(let i=1; i <=5; i++) { %>
-                                                <% if(i <=review.rating) { %>
+                                                <% if(i <= review.rating) { %>
                                                     <i class="fa-solid fa-star"></i>
                                                     <% } else { %>
                                                         <i class="fa-regular fa-star"></i>
@@ -283,14 +283,15 @@
                     </div>
                 </div>
                 <!-- Write Review Form -->
+                <% if(currUser){ %>
                 <div class="section review-form-section">
                     <h2 class="section-title">Write a Review</h2>
                     <form action="/listings/<%= listing._id %>/reviews" method="POST" class="review-form">
                         <div class="form-group">
-                            <label for="reviewerName">Your Name *</label>
+                            <!-- <label for="reviewerName">Your Name *</label>
                             <input type="text" name="review[author]" id="reviewerName" class="form-input"
                                 placeholder="Enter your name" required>
-                            <br>
+                            <br> -->
                             <label for="reviewerEmail">Your Email *</label>
                             <input type="text" name="review[email]" id="reviewerEmail" class="form-input"
                                 placeholder="Enter your email" required>
@@ -328,6 +329,7 @@
                         </div>
                     </form>
                 </div>
+                <% } %>
 
                 <!-- Location Map -->
                 <div class="section location-section">

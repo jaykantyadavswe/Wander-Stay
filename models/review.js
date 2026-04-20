@@ -1,11 +1,8 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
-    author: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true
@@ -28,7 +25,10 @@ const reviewSchema = new Schema({
     listing: {
         type: Schema.Types.ObjectId,
         ref: "Listing",
-        required: true
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
     }
 });
 
