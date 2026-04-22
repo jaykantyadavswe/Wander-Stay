@@ -20,7 +20,7 @@ module.exports.listingSchema = Joi.object({
 
 module.exports.reviewSchema = Joi.object({
     review : Joi.object({
-        author: Joi.string().required(),
+        // author: Joi.string().required(),
         email: Joi.string().required(),
         rating: Joi.number().required().max(5).min(1),
         comment: Joi.string().required(),
