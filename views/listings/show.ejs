@@ -66,7 +66,7 @@
                         <div class="listing-meta">
                             <span class="rating">
                                 <i class="fa-solid fa-star"></i>
-                                <%= listing.averageRating = 4.5 %> (<%= listing.reviewCount = 5 %> reviews)
+                                <%= listing.averageRating=4.5 %> (<%= listing.reviewCount=5 %> reviews)
                             </span>
                             <span class="location-tag">
                                 <i class="fa-solid fa-location-dot"></i>
@@ -247,7 +247,7 @@
                                         </div>
                                         <div class="review-rating">
                                             <% for(let i=1; i <=5; i++) { %>
-                                                <% if(i <= review.rating) { %>
+                                                <% if(i <=review.rating) { %>
                                                     <i class="fa-solid fa-star"></i>
                                                     <% } else { %>
                                                         <i class="fa-regular fa-star"></i>
@@ -284,64 +284,63 @@
                 </div>
                 <!-- Write Review Form -->
                 <% if(currUser){ %>
-                <div class="section review-form-section">
-                    <h2 class="section-title">Write a Review</h2>
-                    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="review-form">
-                        <div class="form-group">
-                            <!-- <label for="reviewerName">Your Name *</label>
+                    <div class="section review-form-section">
+                        <h2 class="section-title">Write a Review</h2>
+                        <form action="/listings/<%= listing._id %>/reviews" method="POST" class="review-form">
+                            <div class="form-group">
+                                <!-- <label for="reviewerName">Your Name *</label>
                             <input type="text" name="review[author]" id="reviewerName" class="form-input"
                                 placeholder="Enter your name" required>
                             <br> -->
-                            <label for="reviewerEmail">Your Email *</label>
-                            <input type="text" name="review[email]" id="reviewerEmail" class="form-input"
-                                placeholder="Enter your email" required>
-                        </div>
+                                <label for="reviewerEmail">Your Email *</label>
+                                <input type="text" name="review[email]" id="reviewerEmail" class="form-input"
+                                    placeholder="Enter your email" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Rating *</label>
-                            <div class="rating-input">
-                                <div class="stars" id="ratingStars">
-                                    <i class="fa-regular fa-star" data-rating="1"></i>
-                                    <i class="fa-regular fa-star" data-rating="2"></i>
-                                    <i class="fa-regular fa-star" data-rating="3"></i>
-                                    <i class="fa-regular fa-star" data-rating="4"></i>
-                                    <i class="fa-regular fa-star" data-rating="5"></i>
+                            <div class="form-group">
+                                <label>Rating *</label>
+                                <div class="rating-input">
+                                    <div class="stars" id="ratingStars">
+                                        <i class="fa-regular fa-star" data-rating="1"></i>
+                                        <i class="fa-regular fa-star" data-rating="2"></i>
+                                        <i class="fa-regular fa-star" data-rating="3"></i>
+                                        <i class="fa-regular fa-star" data-rating="4"></i>
+                                        <i class="fa-regular fa-star" data-rating="5"></i>
+                                    </div>
+                                    <input type="hidden" name="review[rating]" id="ratingValue" value="1" required>
+                                    <span class="rating-text" id="ratingText">Select a rating</span>
                                 </div>
-                                <input type="hidden" name="review[rating]" id="ratingValue" value="1" required>
-                                <span class="rating-text" id="ratingText">Select a rating</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewComment">Your Review *</label>
+                                <textarea name="review[comment]" id="reviewComment" class="form-input review-textarea"
+                                    placeholder="Share your experience about this place..." rows="4"
+                                    required></textarea>
+                                <small class="form-help">Minimum 10 characters</small>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary submit-review-btn">
+                                    <i class="fa-solid fa-paper-plane"></i> Submit Review
+                                </button>
+                                <button type="button" class="btn-secondary cancel-review-btn" onclick="cancelReview()">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <% } %>
+                        <!-- Location Map -->
+                        <div class="section location-section">
+                            <h2 class="section-title">Where you'll be</h2>
+                            <div class="map-placeholder">
+                                <iframe width="100%" height="100%" style="border:2px;" allowfullscreen
+                                    loading="lazy"
+                                    src="https://maps.google.com/maps?q=<%= encodeURIComponent(listing.title + ', ' + listing.location + ', ' + listing.country) %>&output=embed">
+                                </iframe>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="reviewComment">Your Review *</label>
-                            <textarea name="review[comment]" id="reviewComment" class="form-input review-textarea"
-                                placeholder="Share your experience about this place..." rows="4" required></textarea>
-                            <small class="form-help">Minimum 10 characters</small>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary submit-review-btn">
-                                <i class="fa-solid fa-paper-plane"></i> Submit Review
-                            </button>
-                            <button type="button" class="btn-secondary cancel-review-btn" onclick="cancelReview()">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <% } %>
-
-                <!-- Location Map -->
-                <div class="section location-section">
-                    <h2 class="section-title">Where you'll be</h2>
-                    <div class="map-placeholder">
-                        <i class="fa-solid fa-map"></i>
-                        <p>Map will be displayed here</p>
-                        <small>
-                            <%= listing.location %>, <%= listing.country %>
-                        </small>
-                    </div>
-                </div>
             </div>
 
             <!-- Sidebar - Booking Card -->
@@ -406,7 +405,6 @@
             </div>
         </div>
     </div>
-
     <script>
         let currentImageIndex = 0;
         // Gallery images - can be extended to pull from database if needed

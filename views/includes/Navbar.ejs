@@ -1,6 +1,6 @@
 <nav class="navbar custom-navbar sticky-top">
     <div class="navbar-left d-flex align-items-center gap-3">
-        <a href="/" class="brand-logo">
+        <a href="/listings" class="brand-logo">
             <div class="brand-circle">
                 <i class="fa-solid fa-house"></i>
                 <i class="fa-solid fa-location-dot"></i>
@@ -24,31 +24,73 @@
             <i class="fa-regular fa-flag"></i>
         </button>
         <button class="profile-menu" type="button">
-            <div class="avatar"></div>
+            <div class="avatar-icon avatar" id="avatarMenu">
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
             <% if(currUser){ %>
-                <span><%= currUser.name %></span>
-                <% {style="display: block"} %>
-            <% } else { %>
-                <span>Guest</span>
-            <% } %>
-            <i class="fa-solid fa-bars"></i>
+                <span>
+                    <%= currUser.name %>
+                </span>
+                <% {style="display: block" } %>
+                    <% } else { %>
+                        <span>Guest</span>
+                        <% } %>
+                            <i class="fa-solid fa-bars"></i>
         </button>
+
+        <!-- Dropdown Menu -->
+        <div class="menu" id="menu">
+
+            <% if(currUser){ %>
+                <a href="#"><i class="fa-solid fa-address-book"></i> Profile</a>
+                <a href="#"><i class="fa-solid fa-bucket"></i> My Bookings</a>
+                <a href="#"><i class="fa-solid fa-heart"></i> Wishlist </a>
+                <a href="/listings"><i class="fa-solid fa-house"></i> Explore Stays</a>
+                <a href="/listings/new"><i class="fa-solid fa-circle-plus"></i> Become a Host</a>
+                <a href="/logout"><i class="fa-solid fa-arrow-right-to-bracket"></i> log-out</a>
+                <% } else { %>
+                    <a href="/login"><i class="fa-solid fa-user"></i> Log-in</a>
+                    <a href="/signup"><i class="fa-solid fa-user-plus"></i> Sign-up</a>
+                    <% } %>
+        </div>
     </div>
 </nav>
 
+ 
 <script>
     const profileMenu = document.querySelector('.profile-menu');
     const avatar = document.querySelector('.avatar');
     const guestName = document.querySelector('.profile-menu span');
 
     if (`<%= currUser ? 'true' : 'false' %>` === 'true') {
-        avatar.style.display = 'block';
-        guestName.style.display = 'block';
+        avatar.classList.remove('hidden');
+        guestName.classList.remove('hidden');
         profileMenu.classList.add('profile-menuLoggedIn');
-        guestName.textContent = 'John Doe'; // Replace with actual user name
+
+        guestName.textContent = "<%= currUser ? currUser.username : '' %>";
     } else {
-        avatar.style.display = 'none';
-        guestName.style.display = 'none';
+        avatar.classList.add('hidden');
+        guestName.classList.add('hidden');
         profileMenu.classList.remove('profile-menuLoggedIn');
     }
-</script>
+
+    window.addEventListener("load", () => {
+        setTimeout(() => {
+            profileMenu.classList.add("show");
+        }, 100);
+    });
+
+    const menu = document.getElementById("menu");
+    profileMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("active");
+    })
+
+    menu.addEventListener("click", (e) => {
+        e.stopPropagation();
+    });
+
+    document.addEventListener("click", () => {
+        menu.classList.remove("active");
+    });
+</script> 

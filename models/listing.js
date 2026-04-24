@@ -9,12 +9,8 @@ const listingSchema = new Schema({
     },
     description: String,
     image: {
-        filename: String,
-        url: {
-            type: String,
-            default: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww",
-            set: (v) => v === "" ? "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww" : v
-        }
+        url: String,
+        filename: String
     },
     price: {
         type: Number,
@@ -60,17 +56,17 @@ const listingSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
-    }
+    },
 });
 
-listingSchema.post("findOneAndDelete", async(listing) => {
-    if(listing){
-        await Review.deleteMany({_id: {$in: listing.reviews}});
+listingSchema.post("findOneAndDelete", async (listing) => {
+    if (listing) {
+        await Review.deleteMany({ _id: { $in: listing.reviews } });
     }
 })
 
 // Virtual for calculating average rating
-listingSchema.virtual('averageRating').get(function() {
+listingSchema.virtual('averageRating').get(function () {
     if (this.reviews && this.reviews.length > 0) {
         const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
         return (sum / this.reviews.length).toFixed(1);
@@ -79,7 +75,7 @@ listingSchema.virtual('averageRating').get(function() {
 });
 
 // Virtual for getting review count
-listingSchema.virtual('reviewCount').get(function() {
+listingSchema.virtual('reviewCount').get(function () {
     return this.reviews ? this.reviews.length : 0;
 });
 

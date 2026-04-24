@@ -57,7 +57,8 @@
             </div>
 
             <!-- Edit Form -->
-            <form action="/listings/<%= listing._id %>?_method=PUT" method="post" class="edit-form" id="editForm">
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="post" class="edit-form" id="editForm"
+                enctype="multipart/form-data">
                 <!-- Basic Information -->
                 <div class="form-section" data-section="basic">
                     <div class="section-header">
@@ -206,13 +207,12 @@
                                 </h3>
                             </div>
                             <div class="form-group">
-                                <label for="imageUrl" class="form-label">
+                                <label for="imageUpload" class="form-label">
                                     <i class="fa-solid fa-link"></i>
-                                    Image URL
+                                    Upload Image
                                 </label>
-                                <input type="url" id="imageUrl" name="listing[image][url]"
-                                    value="<%= listing.image.url %>" class="form-input"
-                                    placeholder="https://example.com/image.jpg">
+                                <input type="file" id="imageUpload" name="listing[image]" value="<%= listing.image.url %>"
+                                    class="form-input">
                                 <div class="form-help">
                                     <i class="fa-solid fa-info-circle"></i>
                                     Enter a direct link to your property image (JPG, PNG, WebP)
@@ -312,30 +312,36 @@
                             Choose all that apply so guests can see what makes your listing stand out.
                         </div>
 
-                        <% const amenityOptions = [
-                            { value: 'wifi', icon: 'fa-wifi', label: 'WiFi', description: 'High-speed internet' },
-                            { value: 'kitchen', icon: 'fa-kitchen-set', label: 'Kitchen', description: 'Fully equipped kitchen' },
-                            { value: 'parking', icon: 'fa-car', label: 'Parking', description: 'Free parking available' },
-                            { value: 'pool', icon: 'fa-swimming-pool', label: 'Pool', description: 'Swimming pool access' },
-                            { value: 'gym', icon: 'fa-dumbbell', label: 'Gym', description: 'Fitness center access' },
-                            { value: 'ac', icon: 'fa-fan', label: 'Air Conditioning', description: 'Climate control' },
-                            { value: 'tv', icon: 'fa-tv', label: 'Smart TV', description: 'Entertainment system' },
-                            { value: 'washer', icon: 'fa-shirt', label: 'Washer', description: 'Laundry facilities' }
-                        ]; %>
+                        <% const amenityOptions=[ { value: 'wifi' , icon: 'fa-wifi' , label: 'WiFi' ,
+                            description: 'High-speed internet' }, { value: 'kitchen' , icon: 'fa-kitchen-set' ,
+                            label: 'Kitchen' , description: 'Fully equipped kitchen' }, { value: 'parking' ,
+                            icon: 'fa-car' , label: 'Parking' , description: 'Free parking available' }, { value: 'pool'
+                            , icon: 'fa-swimming-pool' , label: 'Pool' , description: 'Swimming pool access' }, {
+                            value: 'gym' , icon: 'fa-dumbbell' , label: 'Gym' , description: 'Fitness center access' },
+                            { value: 'ac' , icon: 'fa-fan' , label: 'Air Conditioning' , description: 'Climate control'
+                            }, { value: 'tv' , icon: 'fa-tv' , label: 'Smart TV' , description: 'Entertainment system'
+                            }, { value: 'washer' , icon: 'fa-shirt' , label: 'Washer' ,
+                            description: 'Laundry facilities' } ]; %>
 
-                        <div class="amenities-grid">
-                            <% amenityOptions.forEach(option => { %>
-                                <label class="amenity-checkbox">
-                                    <input type="checkbox" name="listing[amenities]" value="<%= option.value %>" <%= (listing.amenities && listing.amenities.includes(option.value)) ? 'checked' : '' %> />
-                                    <span class="checkmark"><i class="fa-solid fa-check"></i></span>
-                                    <i class="fa-solid <%= option.icon %>"></i>
-                                    <div class="amenity-text">
-                                        <span class="amenity-name"><%= option.label %></span>
-                                        <span class="amenity-desc"><%= option.description %></span>
-                                    </div>
-                                </label>
-                            <% }) %>
-                        </div>
+                            <div class="amenities-grid">
+                                <% amenityOptions.forEach(option=> { %>
+                                    <label class="amenity-checkbox">
+                                        <input type="checkbox" name="listing[amenities]" value="<%= option.value %>"
+                                            <%=(listing.amenities && listing.amenities.includes(option.value))
+                                            ? 'checked' : '' %> />
+                                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                                        <i class="fa-solid <%= option.icon %>"></i>
+                                        <div class="amenity-text">
+                                            <span class="amenity-name">
+                                                <%= option.label %>
+                                            </span>
+                                            <span class="amenity-desc">
+                                                <%= option.description %>
+                                            </span>
+                                        </div>
+                                    </label>
+                                    <% }) %>
+                            </div>
                     </div>
                 </div>
 
@@ -407,50 +413,45 @@
         });
 
         // Enhanced image URL preview functionality
-        document.getElementById('imageUrl').addEventListener('input', function (e) {
-            const url = e.target.value.trim();
+        document.getElementById('imageUpload').addEventListener('change', function (e) {
+            const file = e.target.files[0];
             const newPreview = document.getElementById('newImagePreview');
 
-            if (url) {
-                // Show loading state
-                newPreview.innerHTML = `
-                <div class="preview-loading">
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    <p>Loading preview...</p>
-                </div>
-            `;
+            if (!file) return;
 
-                // Create image to test URL
-                const testImg = new Image();
-                testImg.onload = function () {
-                    newPreview.innerHTML = `
-                    <img src="${url}" alt="New property image" class="preview-img">
-                    <div class="image-overlay">
-                        <div class="image-info">
-                            <i class="fa-solid fa-check-circle"></i>
-                            <span>New Image</span>
-                        </div>
-                    </div>
-                `;
-                };
-                testImg.onerror = function () {
-                    newPreview.innerHTML = `
-                    <div class="preview-error">
-                        <i class="fa-solid fa-exclamation-triangle"></i>
-                        <p>Invalid image URL</p>
-                        <small>Please enter a valid image link</small>
-                    </div>
-                `;
-                };
-                testImg.src = url;
-            } else {
+            // Show loading state
+            newPreview.innerHTML = `
+        <div class="preview-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <p>Loading preview...</p>
+        </div>
+    `;
+
+            // FileReader reads local file — no URL needed
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
                 newPreview.innerHTML = `
-                <div class="preview-placeholder">
-                    <i class="fa-solid fa-cloud-upload-alt"></i>
-                    <p>Image preview will appear here</p>
+            <img src="${e.target.result}" alt="New property image" class="preview-img">
+            <div class="image-overlay">
+                <div class="image-info">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>New Image</span>
                 </div>
-            `;
-            }
+            </div>
+        `;
+            };
+
+            reader.onerror = function () {
+                newPreview.innerHTML = `
+            <div class="preview-error">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <p>Could not preview image</p>
+            </div>
+        `;
+            };
+
+            reader.readAsDataURL(file); // converts file to base64 URL for preview
         });
 
         // Enhanced form validation
