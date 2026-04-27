@@ -56,7 +56,13 @@
     </div>
 </nav>
 
- 
+<div class="login-sec-btn">
+    <a href="/login"><i class="fa-solid fa-user"></i> Log In</a>
+    <hr>
+    <a href="/signup"><i class="fa-solid fa-user-plus"></i> Sign up</a>
+</div>
+
+
 <script>
     const profileMenu = document.querySelector('.profile-menu');
     const avatar = document.querySelector('.avatar');
@@ -81,9 +87,11 @@
     });
 
     const menu = document.getElementById("menu");
+    const secMenu = document.querySelector('.login-sec-btn');
     profileMenu.addEventListener('click', (e) => {
         e.stopPropagation();
         menu.classList.toggle("active");
+        secMenu.classList.toggle("active");
     })
 
     menu.addEventListener("click", (e) => {
@@ -93,4 +101,4 @@
     document.addEventListener("click", () => {
         menu.classList.remove("active");
     });
-</script> 
+</script>
