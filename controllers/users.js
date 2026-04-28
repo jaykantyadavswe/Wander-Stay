@@ -5,9 +5,10 @@ module.exports.renderSignupForm = (req, res) => {
 
 module.exports.signup = async (req, res) => {
     try {
-        let { username, email, password } = req.body;
+        let { fullname, username, email, password } = req.body;
 
         const newUser = new User({
+            fullname,
             username,
             email
         });
@@ -46,3 +47,11 @@ module.exports.logout = (req, res, next) => {
         res.redirect("/listings");
     });
 };
+
+module.exports.profile = (req, res) => {
+    if (!req.user) {
+        return res.redirect("/login");
+    }
+
+    res.render("users/profile.ejs", { user: req.user });
+}

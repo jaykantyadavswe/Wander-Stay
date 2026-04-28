@@ -383,7 +383,7 @@ body {
     }
 
     .menu.active {
-        display: none;
+        /* display: block; */
     }
 
     /* show login-sec-btn */
